@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
+import './form.css';
 
 const useForm = (callback, defaultValues={}) => {
 
   const [values, setValues] = useState({});
 
+
   const handleSubmit = (event) => {
     event.preventDefault();
     callback(values);
+    localStorage.setItem('formData', JSON.stringify(values));
   };
 
   const handleChange = (event) => {

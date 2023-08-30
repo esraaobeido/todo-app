@@ -1,18 +1,14 @@
-import React from "react";
+import React from 'react';
 
-const List = (props) => {
+const List = ({ items, toggleComplete }) => {
   return (
     <div>
-      {props.items.map((item) => (
+      {items.map(item => (
         <div className="list-item" key={item.id}>
           <p>{item.text}</p>
-          <p>
-            <small>Assigned to: {item.assignee}</small>
-          </p>
-          <p>
-            <small>Difficulty: {item.difficulty}</small>
-          </p>
-          <div className="complete" onClick={() => props.toggleComplete(item.id)}>
+          <p><small>Assigned to: {item.assignee}</small></p>
+          <p><small>Difficulty: {item.difficulty}</small></p>
+          <div className="complete" onClick={() => toggleComplete(item.id)}>
             Complete: {item.complete.toString()}
           </div>
           <hr />
@@ -21,4 +17,5 @@ const List = (props) => {
     </div>
   );
 };
+
 export default List;
