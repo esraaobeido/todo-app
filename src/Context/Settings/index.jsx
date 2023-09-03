@@ -1,14 +1,23 @@
-import React from "react";
-export const SettingsContext = React.createContext();
-export default function Settings(props) {
-  const state = {
-    items:5,
-    completed:false,
-    difficulty:'difficulty'
+import React, { createContext, useContext, useState } from 'react';
+
+const SettingsContext = createContext();
+
+export const SettingsProvider = ({ children }) => {
+  const defaultSettings = {
+    maxItemsPerPage: 3,
+    hideCompleted: true,
+    defaultSort: 'difficulty',
   };
+
+  const [settings] = useState(defaultSettings);
+
   return (
-    <SettingsContext.Provider value={state}>
-      {props.children}
+    <SettingsContext.Provider value={settings}>
+      {children}
     </SettingsContext.Provider>
   );
-}
+};
+
+export const useSettingsContext = () => {
+  return useContext(SettingsContext);
+};
