@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import useForm from '../../hooks/form.jsx';
-import { useSettingsContext } from '../../Context/Setings/SettingsContext.jsx'; 
+import { useSettingsContext } from '../../Context/Settings/index.jsx'; 
 import { v4 as uuid } from 'uuid';
 import { Pagination } from '@mantine/core';
 import List from '../List/index.jsx';
-import './todo.scss';
 
 const Todo = () => {
   

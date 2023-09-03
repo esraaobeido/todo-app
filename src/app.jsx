@@ -1,6 +1,6 @@
 import React from 'react';
-import Todo from './components/todo/todo.jsx';
-import { SettingsProvider } from './Context/Setings/SettingsContext';
+import Todo from './components/ToDo/index';
+import { SettingsProvider } from './Context/Settings/index';
 import Header from './components/Header/index';
 import Footer from './components/Footer/index';
 
