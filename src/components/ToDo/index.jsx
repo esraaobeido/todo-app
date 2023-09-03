@@ -1,17 +1,14 @@
-import React, { useEffect, useState , useContext } from 'react';
-import { SettingsContext } from '../../Context/Settings/index'; 
-import useForm from '../../hooks/form.js';
-import List from '../List/index.jsx'
-
+import React, { useEffect, useState } from 'react';
+import useForm from '../../hooks/form.jsx';
+import { useSettingsContext } from '../../Context/Setings/SettingsContext.jsx'; 
 import { v4 as uuid } from 'uuid';
 import { Pagination } from '@mantine/core';
+import List from '../List/index.jsx';
+import './todo.scss';
 
-
-
-
-const ToDo = () => {
+const Todo = () => {
   
-  const settings =useContext(SettingsContext);
+  const { maxItemsPerPage, hideCompleted } = useSettingsContext(); 
   
 
   const [defaultValues] = useState({
@@ -54,51 +51,51 @@ const ToDo = () => {
   }, [list]);
 
 
+  const filteredList = hideCompleted
+    ? list.filter((item) => !item.complete)
+    : list;
+
+
+    const paginatedList = filteredList.slice(
+      (currentPage - 1) * maxItemsPerPage,
+      currentPage * maxItemsPerPage
+    );
   return (
-    <>
-      <div className="ToDo">
+    <>   
         <h1>To Do List: {incomplete} items pending</h1>
-      
-
       <form onSubmit={handleSubmit}>
-
-        <h2>Add To Do Item</h2>
-    
+        <h2>Add To Do Item</h2> 
         <label>
           <span>To Do Item</span>
           <input onChange={handleChange} name="text" type="text" placeholder="Item Details" />
         </label>
-
         <label>
           <span>Assigned To</span>
           <input onChange={handleChange} name="assignee" type="text" placeholder="Assignee Name" />
         </label>
-
         <label>
           <span>Difficulty</span>
           <input onChange={handleChange} defaultValue={defaultValues.difficulty} type="range" min={1} max={5} name="difficulty" />
         </label>
-
         <label>
           <button type="submit">Add Item</button>
         </label>
       </form>
-
-
-      <List items={list} toggleComplete={toggleComplete} />
+      <List items={paginatedList} toggleComplete={toggleComplete} />
       
-     
+      {list.length > maxItemsPerPage && (
         <Pagination
-          itemsPerPage={settings.items}
-          total={10}
+          itemsPerPage={maxItemsPerPage}
+          total={filteredList.length}
           page={currentPage}
           onChange={(newPage) => setCurrentPage(newPage)}
+          withPagesCount
         />
-   
+      )}
       
-      </div>
+
     </>
   );
 };
 
-export default ToDo;
+export default Todo;

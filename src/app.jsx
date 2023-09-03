@@ -1,16 +1,15 @@
 import React from 'react';
-import ToDo from "./components/ToDo/index";
-import Settings from "../src/Context/Settings/index";
-
-
-import { MantineProvider } from "@mantine/core";
+import Todo from './components/todo/todo.jsx';
+import { SettingsProvider } from './Context/Setings/SettingsContext';
+import Header from './components/Header/index';
+import Footer from './components/Footer/index';
 
 export default function App() {
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
-      <Settings>
-        <ToDo />
-      </Settings>
-    </MantineProvider>
+    <SettingsProvider>
+      <Header/>
+      <Todo/>
+      <Footer/>
+    </SettingsProvider>
   );
 }
