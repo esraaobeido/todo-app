@@ -2,12 +2,8 @@ import React, { useEffect, useState , useContext } from 'react';
 import { SettingsContext } from '../../Context/Settings/index'; 
 import useForm from '../../hooks/form.js';
 import List from '../List/index.jsx'
-
 import { v4 as uuid } from 'uuid';
 import { Pagination } from '@mantine/core';
-
-
-
 
 const ToDo = () => {
   
