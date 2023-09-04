@@ -9,16 +9,10 @@ const useForm = (callback, defaultValues={}) => {
     callback(values);
   };
 
-  const handleChange = (event) => {
-    event.persist();
-
-    let { name, value } = event.target;
-    if (parseInt(value)) {
-      value = parseInt(value);
-    }
-
-    setValues(values => ({ ...values, [name]: value }));
+  const handleChange = (name, value) => {
+    setValues({ ...values, [name]: value });
   };
+  
 
   useEffect( () => {
     setValues( defaultValues );
