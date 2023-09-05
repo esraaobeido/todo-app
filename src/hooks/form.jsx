@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './form.css';
+import './form.scss';
 
 const useForm = (callback, defaultValues={}) => {
 

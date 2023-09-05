@@ -1,16 +1,22 @@
 import React from 'react';
-import ToDo from "./components/ToDo/index";
-import Settings from "../src/Context/Settings/index";
-
-
-import { MantineProvider } from "@mantine/core";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ToDo from './components/ToDo/index';
+import { SettingsProvider } from './Context/Settings/index';
+import Header from './components/Header/index';
+import Footer from './components/Footer/index';
+import SettingsForm from './components/Settings/SettingsForm'; 
 
 export default function App() {
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
-      <Settings>
-        <ToDo />
-      </Settings>
-    </MantineProvider>
+    <SettingsProvider>
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/" element={<ToDo/>} />
+          <Route path="/settings" element={<SettingsForm/>} />
+        </Routes>
+        <Footer />
+      </Router>
+    </SettingsProvider>
   );
 }

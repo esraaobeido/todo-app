@@ -1,4 +1,5 @@
 import React from 'react';
+import './list.scss';
 
 const List = ({ items, toggleComplete }) => {
   return (

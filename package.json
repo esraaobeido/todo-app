@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@mantine/core": "^6.0.19",
+    "react-router-dom": "^6.15.0",
     "sass": "^1.66.1",
     "uuid": "^9.0.0"
   }
