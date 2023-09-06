@@ -1,6 +1,8 @@
 import React from 'react';
 import './header.scss';
 import { Link } from 'react-router-dom';
+// import Login from '../Auth/login';
+
 
 function Header()
 {
@@ -9,7 +11,9 @@ function Header()
   <header>
       <h2><Link to="/">Home</Link></h2>
       <h2><Link to="/settings">Settings</Link></h2>
+      {/* <h2><Link to="/login">Login</Link></h2> */}
     </header>
+    {/* <Login/> */}
     </>
   )
 }
