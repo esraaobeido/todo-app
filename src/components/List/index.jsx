@@ -12,6 +12,7 @@ const List = ({ items, toggleComplete }) => {
           <button onClick={() => toggleComplete(item.id)}>
             {item.complete ? 'Mark Incomplete' : 'Mark Complete'}
           </button>
+          
           <hr />
         </div>
       ))}
