@@ -1,20 +1,45 @@
-.todo-container {
-    background-color: #f0f0f0;
-    padding: 20px;
-  }
-  
-  .todo-title {
-    font-size: 24px;
-    color:burlywood;
-  }
-  
-  .todo-button {
-    background-color:brown;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-  }
-  
+$primary-color: #1caa8b;
+$secondary-color: #6c757d;
 
-  
+.ToDo {
+  padding: 20px;
+
+  h1 {
+    color: $primary-color;
+    margin-bottom: 20px;
+  }
+
+  form {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+
+      span {
+        display: block;
+        color: $secondary-color;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      input[type="range"] {
+        width: 50%;
+      }
+
+      button[type="submit"] {
+        background-color: $primary-color;
+        color: whitesmoke;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    }
+  }
+}

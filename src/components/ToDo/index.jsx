@@ -2,35 +2,52 @@ import React, { useEffect, useState } from 'react';
 import useForm from '../../hooks/form.jsx';
 import { useSettingsContext } from '../../Context/Settings/index.jsx';
 import { v4 as uuid } from 'uuid';
-import { Pagination, Container, Text, TextInput, Slider, Button } from '@mantine/core';
+import { Pagination } from '@mantine/core';
 import List from '../List/index.jsx';
+import PaginationComponent from '../Pagination/pagination.jsx';
 import './todo.scss';
 
-const Todo = () => {
-  const { maxItemsPerPage, hideCompleted } = useSettingsContext();
-  const [sort, setSort] = useState('difficulty');
-  const [defaultValues] = useState({ difficulty: 4 });
+const ToDo = () => {
+  const [defaultValues] = useState({
+    difficulty: 4,
+  });
+
+  const { settings } = useSettingsContext();
   const [list, setList] = useState([]);
   const [incomplete, setIncomplete] = useState([]);
+  const [formData, setFormData] = useState({});
   const { handleChange, handleSubmit, values } = useForm(addItem, defaultValues);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const sortedList = list.slice().sort((a, b) => {
-    if (sort === 'difficulty') {
-      return a.difficulty - b.difficulty;
+  useEffect(() => {
+    let incompleteCount = list.filter(item => !item.complete).length;
+    setIncomplete(incompleteCount);
+    document.title = `To Do List: ${incomplete} items pending`;
+    localStorage.setItem('todoList', JSON.stringify(list));
+  }, [list, incomplete]);
+
+  useEffect(() => {
+    const storedList = localStorage.getItem('todoList');
+    if (storedList) {
+      setList(JSON.parse(storedList));
     }
-  });
+    const storedFormData = localStorage.getItem('formData');
+    if (storedFormData) {
+      setFormData(JSON.parse(storedFormData));
+    }
+  }, []);
 
   function addItem(item) {
-    item.id = uuid();
-    item.complete = false;
-    console.log(item);
-    setList([...list, item]);
-  }
+    const isDuplicate = list.some(existingItem => existingItem.text === item.text && existingItem.assignee === item.assignee);
 
-  function deleteItem(id) {
-    const items = list.filter(item => item.id !== id);
-    setList(items);
+    if (!isDuplicate) {
+      item.id = uuid();
+      item.complete = false;
+      const updatedList = [...list, item];
+      setList([...list, item]);
+      localStorage.setItem('todoList', JSON.stringify(updatedList));
+    
+    }
   }
 
   function toggleComplete(id) {
@@ -40,78 +57,68 @@ const Todo = () => {
       }
       return item;
     });
-
     setList(items);
   }
 
-  useEffect(() => {
-    let incompleteCount = list.filter(item => !item.complete).length;
-    setIncomplete(incompleteCount);
-    document.title = `To Do List: ${incomplete}`;
-  }, [list]);
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
-  const filteredList = hideCompleted
-    ? list.filter(item => !item.complete)
-    : list;
+  const filteredList = settings.hideCompleted
+    ? list
+    : list.filter((item) => !item.complete);
 
-  const paginatedList = filteredList.slice(
-    (currentPage - 1) * maxItemsPerPage,
-    currentPage * maxItemsPerPage
-  );
+  const startIndex = (currentPage - 1) * settings.maxItemsPerPage;
+  const endIndex = startIndex + settings.maxItemsPerPage;
+  const paginatedList = filteredList.slice(startIndex, endIndex);
 
   return (
-    <Container size="xs">
-      <Text align="center" size="xl">
-        To Do List: {incomplete} items pending
-      </Text>
-      <form onSubmit={handleSubmit} className="todo-form">
-        <Text size="lg" weight={700} align="center" className="todo-form-label">
-          Add To Do Item
-        </Text>
-        <TextInput
-          value={values.text}
-          onChange={handleChange}
-          name="text"
-          label="To Do Item"
-          placeholder="Item Details"
-          required
-          className="todo-form-input"
-        />
-        <TextInput
-          value={values.assignee}
-          onChange={handleChange}
-          name="assignee"
-          label="Assigned To"
-          placeholder="Assignee Name"
-          required
-          className="todo-form-input"
-        />
-        <Slider
-          value={values.difficulty}
-          onChange={(value) => handleChange('difficulty', value)}
-          min={1}
-          max={5}
-          label="Difficulty"
-          className="todo-form-input"
-        />
+    <>
+      <div className="ToDo">
+        <h1>To Do List: {incomplete} items pending</h1>
 
-        <Button type="submit" variant="primary" className="todo-button">
-          Add Item
-        </Button>
-      </form>
-      <List items={sortedList} toggleComplete={toggleComplete} />
+        <form onSubmit={handleSubmit}>
+          <h2>Add To Do Item</h2>
 
-      {list.length > maxItemsPerPage && (
-        <Pagination
-          itemsPerPage={maxItemsPerPage}
-          total={filteredList.length}
-          page={currentPage}
-          onChange={(newPage) => setCurrentPage(newPage)}
-          withPagesCount
-        />
-      )}
-    </Container>
+          <label>
+            <span>To Do Item</span>
+            <input onChange={handleChange} name="text" type="text" placeholder="Item Details" />
+          </label>
+
+          <label>
+            <span>Assigned To</span>
+            <input onChange={handleChange} name="assignee" type="text" placeholder="Assignee Name" />
+          </label>
+
+          <label>
+            <span>Difficulty</span>
+            <input onChange={handleChange} defaultValue={defaultValues.difficulty} type="range" min={1} max={5} name="difficulty" />
+          </label>
+
+          <label>
+            <button type="submit">Add Item</button>
+          </label>
+        </form>
+
+        <List items={paginatedList} toggleComplete={toggleComplete} />
+
+        {list.length > settings.maxItemsPerPage && (
+          <PaginationComponent
+            currentPage={currentPage}
+            totalItems={filteredList.length}
+            itemsPerPage={settings.maxItemsPerPage}
+            onPageChange={handlePageChange}
+          />
+        )}
+
+      </div>
+
+      <div>
+        <p>Items per page: {settings.maxItemsPerPage}</p>
+        <p>Show completed items: {settings.hideCompleted ? 'yes' : 'no'}</p>
+      </div>
+    </>
   );
 };
 
-export default Todo;
+export default ToDo;
