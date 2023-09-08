@@ -9,9 +9,10 @@ const List = ({ items, toggleComplete }) => {
           <p>{item.text}</p>
           <p><small>Assigned to: {item.assignee}</small></p>
           <p><small>Difficulty: {item.difficulty}</small></p>
-          <div className="complete" onClick={() => toggleComplete(item.id)}>
-            Complete: {item.complete.toString()}
-          </div>
+          <button onClick={() => toggleComplete(item.id)}>
+            {item.complete ? 'Mark Incomplete' : 'Mark Complete'}
+          </button>
+          
           <hr />
         </div>
       ))}
